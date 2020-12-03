@@ -1,30 +1,24 @@
-import { readFileSync } from "fs"
+import { readFileSync } from 'fs'
 
-const input = readFileSync("./src/input.txt").toString()
-const reg = /([0-9]*)-([0-9]*) ([a-z]): ([a-z]*)/mg
-let ok = 0
-let m
-while (m = reg.exec(input)) {
-  const low = parseInt(m[1],10)
-  const high = parseInt(m[2],10)
-  const b = m[3]
-  const passw = m[4]
+const input = readFileSync('./src/input.txt').toString().split('\n')
+const w = input[0].length - 1
 
-  const x = passw[low-1] === b
-  const y = passw[high-1] === b
-  if (x != y) {
-    ++ok
+let product = 1
+const slopeX = [1, 3, 5, 7, 1]
+const slopeY = [1, 1, 1, 1, 2]
+for (let i = 0; i < 5; i++) {
+  const dx = slopeX[i]
+  const dy = slopeY[i]
+
+  let x = 0
+  let trees = 0
+  for (let y = dy; y < input.length; y = y + dy) {
+    x = x + dx
+    if (input[y][x % w] === '#') {
+      trees++
+    }
   }
-
-  // let count = 0
-  // for(let i = 0; i < passw.length; ++i) {
-  //   if (passw[i] === b) {
-  //     count++
-  //   }
-  // }
-  // if (low <= count && count <= high) {
-  //   ok++
-  // }
+  product = product * trees
+  console.log(trees)
 }
-
-console.log(ok)
+console.log(product)
